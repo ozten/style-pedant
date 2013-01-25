@@ -29,9 +29,14 @@ argv._.forEach(function(file, i) {
           report(file, lineNum, line, 'Line ends in whitespace');
           exitCode = 1;
         }
-        if (line.indexOf('function (') !== -1) {
+        // TODO without a .pedanticrc we'll need to concatentate strings here
+        if (line.indexOf('function ' + '(') !== -1) {
           report(file, lineNum, line, 'Space before function arguments');
           exitCode = 1;
+        }
+        if (line.length > 80) {
+          report(file, lineNum, line, 'Line is too long at ' +
+                 (line.length + 1) + ' characters');
         }
         if (i === argv._.length - 1 &&
             lineNum === lines.length -1) {
