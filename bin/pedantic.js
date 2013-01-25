@@ -9,6 +9,10 @@ var argv = require('optimist')
 
 var exitCode = 0;
 
+function report(file, lineNum, line, issue) {
+  console.log(file + ': line', (lineNum + 1) + ',', issue, '--', line);
+}
+
 argv._.forEach(function(file, i) {
   Step(function() {
     fs.readFile(file, 'utf8', this);
@@ -18,15 +22,15 @@ argv._.forEach(function(file, i) {
       lines.forEach(function(line, lineNum) {
         //process.stdout.write('.');
         if (line.indexOf('\t') !== -1) {
-          console.log(file, ': line', lineNum, ', Tabs instead of spaces --', line);
+          report(file, lineNum, line, 'Tabs instead of spaces');
           exitCode = 1;
         }
         if (line.length > 0 && line.charAt(line.length - 1) == ' ') {
-          console.log(file, ': line', lineNum, ', Line ends in whitespace --', line);
+          report(file, lineNum, line, 'Line ends in whitespace');
           exitCode = 1;
         }
         if (line.indexOf('function (') !== -1) {
-          console.log(file, ': line', lineNum, ', Space before function arguments --', line);
+          report(file, lineNum, line, 'Space before function arguments');
           exitCode = 1;
         }
         if (i === argv._.length - 1 &&
