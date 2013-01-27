@@ -10,7 +10,8 @@ var argv = require('optimist')
 var exitCode = 0;
 
 function report(file, lineNum, line, issue) {
-  console.log(file + ': line', (lineNum + 1) + ',', issue, '--', line);
+    process.stdout.write([file + ': line ', (lineNum + 1) + ', ',
+                         issue, ' -- [', line, ']\n'].join(''));
 }
 
 argv._.forEach(function(file, i) {
@@ -41,6 +42,9 @@ argv._.forEach(function(file, i) {
         if (i === argv._.length - 1 &&
             lineNum === lines.length -1) {
           process.exit(exitCode);
+        }
+        if (line.indexOf('consol' + 'e.log') !== -1) {
+          report(file, lineNum, line, 'console logging left in code');
         }
       });
     });
