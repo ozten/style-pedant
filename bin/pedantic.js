@@ -39,12 +39,13 @@ argv._.forEach(function(file, i) {
           report(file, lineNum, line, 'Line is too long at ' +
                  (line.length + 1) + ' characters');
         }
+        if (line.indexOf('consol' + 'e.log') !== -1) {
+          report(file, lineNum, line, 'console logging left in code');
+        }
+
         if (i === argv._.length - 1 &&
             lineNum === lines.length -1) {
           process.exit(exitCode);
-        }
-        if (line.indexOf('consol' + 'e.log') !== -1) {
-          report(file, lineNum, line, 'console logging left in code');
         }
       });
     });
